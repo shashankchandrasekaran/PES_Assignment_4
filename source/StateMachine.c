@@ -35,6 +35,7 @@
 #define Blink_Count 10 //To blink for 10 times in crosswalk to obtain 1s delay
 #define MS_250 4 //Count for 250 Ms delay
 #define MS_750 12 //Count for 750 Ms delay
+#define SCALE 1000 //Divides current time by 1000 for scaling
 
 int R_Cur=0, G_Cur=0, B_Cur=0; /*Current intensity values for calculation
                                           during transition*/
@@ -132,9 +133,9 @@ void Transition(ticktime_t Current_State,ticktime_t Desired_State)
 				}
 			}
 			//Calculation of RGB values at every 62.5 msec
-			R_Cur=Cur_State_R+((Next_State_R-Cur_State_R)*(Current_Time*(MS_62_5/1000)));
-			G_Cur=Cur_State_G+((Next_State_G-Cur_State_G)*(Current_Time*(MS_62_5/1000)));
-			B_Cur=Cur_State_B+((Next_State_B-Cur_State_B)*(Current_Time*(MS_62_5/1000)));
+			R_Cur=Cur_State_R+((Next_State_R-Cur_State_R)*(Current_Time*(MS_62_5/SCALE)));
+			G_Cur=Cur_State_G+((Next_State_G-Cur_State_G)*(Current_Time*(MS_62_5/SCALE)));
+			B_Cur=Cur_State_B+((Next_State_B-Cur_State_B)*(Current_Time*(MS_62_5/SCALE)));
 
 			//Write these calculated RGB values to the TPM channels
 			TPM2->CONTROLS[0].CnV=R_Cur;
@@ -182,7 +183,7 @@ void Traffic_Light(ticktime_t State)
 				if(Touch_Val>=Touch_Det) //If touch detected
 				{
 					LOG("Button press detected, with the system time- %d msec"
-						"since startup\n\r",now());
+							"since startup\n\r",now());
 					Store_State=Cur_State; //Store current state when touch is detected
 					Cur_State=CROSSWALK; //Change state to CROSSWALK
 					//Store current values of R,G and B to be used in transition
@@ -212,7 +213,7 @@ void Traffic_Light(ticktime_t State)
 				if(Touch_Val>=Touch_Det) //If touch detected
 				{
 					LOG("Button press detected, with the system time- %d msec"
-				        "since startup\n\r",now());
+							"since startup\n\r",now());
 					Store_State=Cur_State;
 					Cur_State=CROSSWALK; //Change state to CROSSWALK
 					//Store current values of R,G and B to be used in transition
@@ -242,7 +243,7 @@ void Traffic_Light(ticktime_t State)
 				if(Touch_Val>=Touch_Det) //If touch detected
 				{
 					LOG("Button press detected, with the system time- %d msec"
-						"since startup\n\r",now());
+							"since startup\n\r",now());
 					Store_State=Cur_State;
 					Cur_State=CROSSWALK; //Change state to CROSSWALK
 					//Store current values of R,G and B to be used in transition
@@ -294,19 +295,19 @@ void State_Machine()
 	{
 	case STOP:
 		Traffic_Light(STOP); //Set the STOP color with the delay
-	    if(Cur_State==CROSSWALK) //If state changed to CROSSWALK, exit
+		if(Cur_State==CROSSWALK) //If state changed to CROSSWALK, exit
 			break;
 		else
-		  Transition(STOP,GO); //Else transition from STOP to GO signal
+			Transition(STOP,GO); //Else transition from STOP to GO signal
 		break;
 
 	case GO:
-			Traffic_Light(GO); //Set the GO color with the delay
-		    if(Cur_State==CROSSWALK)
-				break;
-			else
-			  Transition(GO,WARNING); //Transition from GO to WARNING signal
+		Traffic_Light(GO); //Set the GO color with the delay
+		if(Cur_State==CROSSWALK)
 			break;
+		else
+			Transition(GO,WARNING); //Transition from GO to WARNING signal
+		break;
 
 	case WARNING:
 		Traffic_Light(WARNING); //Set the WARNING color with the delay
@@ -323,5 +324,3 @@ void State_Machine()
 		break;
 	}
 }
-
-
