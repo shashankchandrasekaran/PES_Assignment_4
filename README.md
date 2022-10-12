@@ -1,6 +1,6 @@
 # PES_Assignment_4
 PES Assignment 4 on State Machines
-/******************************************************Peer reveiew comments******************************************************************************************/ 
+/*************Peer reveiew comments************/ 
 Reviewer - Harsh Beriwal
 Date and time of review: 10/11/2022 at 11 PM
 Review comments and action taken:
@@ -11,7 +11,7 @@ Action taken: Created #define for 1000 used in calculation during transition
 •	There are Indentation issues in code as well. The Statemachine.c readability issues can be resolved by making the indentation clear. Check State_Machine() Function.
 Action: Corrected the indendation issues in the State_Machine().
 
-/****************************************************Approach toward the program*************************************************************************************/
+/**************Approach toward the program***********/
 State machine was developed identifying the states and events. Based on that, approach was finalized to use switch case based on states.
 Each functionality was individually tested. Like testing SysTick timer first, then PWM and then integrating both with the state machine. The approach of dividing time every sixteenth second was taken and that time was recorded and used for delay and transition calculations. The TSI logic for crosswalk was introduced in the end and the touch slider is polled every 62.5msec except when it is in crosswalk state. For debug and production mode, Log header file was created for defining different times and printf functionality. 
 Testing was done in debug and release mode and timings are accurate. The printing from one state to another is shown after the state transition has taken place i.e. The STOP to GO state in debug mode would be 6 Sec (5 Sec in STOP mode + 1 sec in transition), at 6 seconds the logging would happen indicating a state change.
